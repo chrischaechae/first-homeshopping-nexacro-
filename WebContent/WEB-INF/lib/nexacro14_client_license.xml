@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<license version="1.0">
+	<product>
+		<name>nexacro&#32;platform</name>
+		<version>14</version>
+		<function>Windows,&#32;WindowsRT</function>
+	</product>
+	<customer>
+		<name>TOBESOFT</name>
+		<developerCount>0</developerCount>
+		<rootDomain>0.0.0.0</rootDomain>
+		<targetPlatform>Runtime,HTML5</targetPlatform>
+	</customer>
+	<date>
+		<activation>2020-07-01</activation>
+		<term unit="month">2</term>
+	</date>
+	<key>639W7VFTKBA228STHU28JA7BHRGN7EWZ5</key>
+</license>

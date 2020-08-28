@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "HTTP://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<typeAliases>
+		<!-- <typeAlias alias="BoardVO" type="com.board.VO.BoardVO"/> -->
+		<typeAlias alias="ProductVO" type="com.board.VO.ProductVO"/>
+		<typeAlias alias="ChoiceVO" type="com.board.VO.ChoiceVO"/>
+		<typeAlias alias="ClientVO" type="com.board.VO.ClientVO"/>
+		<typeAlias alias="OrderingVO" type="com.board.VO.OrderingVO"/>
+		<typeAlias alias="ImgVO" type="com.board.VO.ImgVO"/>
+	</typeAliases>
+	
+	<mappers>
+		<mapper resource="com/board/dao/BoardMapper.xml"/>
+	</mappers>
+		
+</configuration>

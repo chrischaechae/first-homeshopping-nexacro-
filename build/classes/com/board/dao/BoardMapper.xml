@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper   
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">  
+
+<mapper namespace="BoardDao">  
+
+	<select id="boardList" parameterType="map" resultType="ProductVO">
+      
+      select * from (select ROW_NUMBER() OVER(order by pro_no desc) rnum,pro_no,pro_name,pro_price,pro_img from product 
+      	 <where>
+			<if test="keyWord !='' and keyField == 'pro_no'">
+				pro_no like '%' ||#{keyWord}||'%'
+			</if>
+			<if test="keyWord !='' and keyField == 'pro_name'">
+				pro_name like '%' ||#{keyWord}||'%'
+			</if>
+			<if test="keyWord !='' and keyField == 'total'">
+			pro_no like '%' ||#{keyWord}||'%' or
+			pro_name like '%' ||#{keyWord}||'%'
+			</if>
+		</where>
+      order by pro_no desc)
+         	<![CDATA[
+     		 ]]>
+       <!--  SELECT SEQ,NAME,TITLE,CONTENT,PASS,HIT,REGDATE FROM (SELECT A.*, ROWNUM RNUM FROM (SELECT * FROM BOARD ORDER BY SEQ DESC)A)
+		<![CDATA[
+		WHERE RNUM >= #{start} AND RNUM <= #{end}		
+		]]>		 -->	
+	</select>
+	
+	<select id="boardCount" parameterType="map" resultType="Integer">
+		SELECT COUNT(*)	FROM product 
+	</select>
+	
+	<insert id="addproduct" parameterType="productVO">
+		insert into product (pro_no,pro_name,pro_price,pro_detail,pro_img) values (product_seq.nextval,#{pro_name},#{pro_price},#{pro_detail},'img') 
+	</insert>
+
+	<update id="uploadimg" parameterType="map">
+		update product set pro_img=#{oriimg} where pro_name=#{pro_name}
+	</update>
+	
+	<select id="pro_detail" parameterType="int" resultType="ProductVO">
+		select * from product where pro_no=#{pro_no} 
+	</select>
+	
+	<update id="pro_update" parameterType="productVO">
+		update product set pro_name=#{pro_name},pro_price=#{pro_price},pro_detail=#{pro_detail} where pro_no=#{pro_no}
+	</update>
+	
+	<update id="reuploadimg" parameterType="map">
+		update product set pro_img=#{oriimg} where pro_no=#{pro_no}
+	</update>
+	
+	<update id="rreuploadimg" parameterType="map">
+		update img set img_name=#{img_name} where pro_no=#{pro_no}
+	</update>
+	
+	<select id="choicelist" parameterType="map" resultType="ChoiceVO">
+       select * from choice where pro_no=#{pro_no} order by choice_no desc
+	</select>
+	
+	<insert id="addchoice" parameterType="ChoiceVO">
+		insert into choice (choice_no,choice_size,choice_color,choice_stock,pro_no) values (choice_seq.nextval,#{choice_size},#{choice_color},#{choice_stock},#{pro_no}) 
+	</insert>
+	
+	<select id="choice_edit" parameterType="int" resultType="ChoiceVO">
+       select * from choice where choice_no=#{choice_no}
+	</select>
+	
+	<update id="updatechoice" parameterType="ChoiceVO">
+		update choice set choice_size=#{choice_size},choice_color=#{choice_color},choice_stock=#{choice_stock} where choice_no=#{choice_no}
+	</update>
+	
+	<delete id="delchoice" parameterType="int">
+		delete from choice where choice_no=#{choice_no}
+	</delete>
+	
+	<select id="clientlist" parameterType="map" resultType="ClientVO">
+		SELECT * FROM CLIENT
+			<where>
+			<if test="keyWord !='' and keyField == 'client_name'">
+				client_name like '%' ||#{keyWord}||'%'
+			</if>
+			<if test="keyWord !='' and keyField == 'client_id'">
+				client_id like '%' ||#{keyWord}||'%'
+			</if>
+			<if test="keyWord !='' and keyField == 'total'">
+				client_name like '%' ||#{keyWord}||'%' or
+				client_id like '%' ||#{keyWord}||'%' 
+			</if>
+			</where>
+				order by client_no desc	
+	</select>
+	
+	<select id="clientdetail" parameterType="int" resultType="ClientVO">
+		SELECT * FROM CLIENT WHERE CLIENT_NO=#{CLIENT_NO}
+	</select>
+	
+	<select id="orderlist" parameterType="map" resultType="OrderingVO">
+		SELECT * FROM ORDERING 
+			<where>
+			<if test="keyWord !='' and keyField == 'ordering_date'">
+				ordering_date like '%' ||#{keyWord}||'%'
+			</if>
+			<if test="keyWord !='' and keyField == 'client_id'">
+				client_id like '%' ||#{keyWord}||'%'
+			</if>
+			<if test="keyWord !='' and keyField == 'ordering_status'">
+				ordering_status like '%' ||#{keyWord}||'%'
+			</if>
+			<if test="keyWord !='' and keyField == 'total'">
+				ordering_date like '%' ||#{keyWord}||'%' or
+				client_id like '%' ||#{keyWord}||'%' or
+				ordering_status like '%' ||#{keyWord}||'%'
+			</if>
+		</where>
+		
+		
+		order by ordering_date desc
+	</select>
+	
+	<select id="orderdetail" parameterType="int" resultType="OrderingVO">
+		SELECT * FROM ORDERING WHERE ORDERING_NO=#{ORDERING_NO}
+	</select>
+	
+	<update id="ordering_status" parameterType="OrderingVO">
+		update ordering set ordering_status=#{ordering_status} where ordering_no=#{ordering_no}
+	</update>
+	
+	<select id="iorderlist" parameterType="map" resultType="OrderingVO">
+		select * from ordering where client_id=#{client_id}
+	</select>
+	
+	<insert id="imgupload" parameterType="map">
+		insert into img (img_no,img_name,pro_no) values (img_seq.nextval,#{img_name},product_seq.currval) 
+	</insert>
+	
+	<select id="dimg" parameterType="int" resultType="ImgVO">
+		SELECT * FROM IMG WHERE PRO_NO=#{PRO_NO}
+	</select>
+	
+	<delete id="delpro" parameterType="int">
+		delete from product where pro_no=#{pro_no}
+	</delete>
+</mapper>
+
+
+
+
+
+
+
